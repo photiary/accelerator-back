@@ -62,6 +62,10 @@ This file contains guidelines for Junie to follow when working on this Spring Bo
 
 * **Data Carriers:** Use **Lombok** for immutable data transfer objects (DTOs). value objects (VOs).
 
+## Controller
+
+- **DO NOT use Entity**: use the `./dto/*Request.java`, `./dto/*Response.java`
+
 ## Data Access
 
 * **Default:** If unsure, lean towards Spring Data JPA for typical applications development.

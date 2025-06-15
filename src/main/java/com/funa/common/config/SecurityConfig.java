@@ -30,6 +30,16 @@ public class SecurityConfig {
                 authorize
                     .requestMatchers("/api/demo/**")
                     .permitAll() // Allow access to /api/demo/** without authentication
+                    .requestMatchers("/api/features/**")
+                    .permitAll()
+                    .requestMatchers("/api/folders/**")
+                    .permitAll()
+                    .requestMatchers("/api/sequence-diagrams/**")
+                    .permitAll()
+                    .requestMatchers("/api/sql-queries/**")
+                    .permitAll()
+                    .requestMatchers("/api/template-prompts/**")
+                    .permitAll()
                     .anyRequest()
                     .authenticated() // Require authentication for all other endpoints
             )
