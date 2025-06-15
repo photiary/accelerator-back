@@ -39,6 +39,9 @@ This file contains guidelines for Junie to follow when working on this Spring Bo
       │     └─ {Domain}Response.java
       └─ common                           # Optional: Truly shared utilities/conifg
          ├─ exception
+         │  ├─ ValidException.java
+         │  ├─ DuplicationException.java
+         │  └─ NotFoundException.java
          └─ config 
       ```
 
@@ -55,13 +58,22 @@ This file contains guidelines for Junie to follow when working on this Spring Bo
          └─ {Domain}.java
       ```
 
-## Data Access
-
-* **Default:** If unsure, lean towards Spring Data JPA for typical applications development.
-
 ## Java Language Features
 
 * **Data Carriers:** Use **Lombok** for immutable data transfer objects (DTOs). value objects (VOs).
+
+## Controller
+
+- **DO NOT use Entity**: use the `./dto/*Request.java`, `./dto/*Response.java`
+
+## Data Access
+
+* **Default:** If unsure, lean towards Spring Data JPA for typical applications development.
+* Default Entity properties:
+    * createdAt
+    * createdId
+    * updatedAt
+    * updatedId
 
 ## Database
 
