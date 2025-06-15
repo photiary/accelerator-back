@@ -3,6 +3,13 @@ package com.funa.templateprompt;
 import com.funa.templateprompt.dto.TemplatePromptMapper;
 import com.funa.templateprompt.dto.TemplatePromptRequestDto;
 import com.funa.templateprompt.dto.TemplatePromptResponseDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +23,7 @@ import java.util.NoSuchElementException;
  */
 @RestController
 @RequestMapping("/api/template-prompts")
+@Tag(name = "Template Prompt", description = "Template Prompt management API")
 public class TemplatePromptController {
 
     private final TemplatePromptService templatePromptService;
@@ -32,6 +40,12 @@ public class TemplatePromptController {
      *
      * @return List of all template prompts
      */
+    @Operation(summary = "Get all template prompts", description = "Retrieves a list of all template prompts")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved template prompts",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = TemplatePromptResponseDto.class)))
+    })
     @GetMapping
     public ResponseEntity<List<TemplatePromptResponseDto>> getAllTemplatePrompts() {
         List<TemplatePrompt> templatePrompts = templatePromptService.getAllTemplatePrompts();
@@ -45,8 +59,17 @@ public class TemplatePromptController {
      * @param id The ID of the template prompt
      * @return The template prompt
      */
+    @Operation(summary = "Get a template prompt by ID", description = "Retrieves a template prompt by its ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved the template prompt",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = TemplatePromptResponseDto.class))),
+        @ApiResponse(responseCode = "404", description = "Template prompt not found",
+                content = @Content)
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<TemplatePromptResponseDto> getTemplatePromptById(@PathVariable Long id) {
+    public ResponseEntity<TemplatePromptResponseDto> getTemplatePromptById(
+            @Parameter(description = "ID of the template prompt to retrieve") @PathVariable Long id) {
         try {
             TemplatePrompt templatePrompt = templatePromptService.getTemplatePromptById(id);
             TemplatePromptResponseDto templatePromptDto = templatePromptMapper.toDto(templatePrompt);
@@ -75,8 +98,18 @@ public class TemplatePromptController {
      * @param templatePromptDto The template prompt data to create
      * @return The created template prompt
      */
+    @Operation(summary = "Create a new template prompt", description = "Creates a new template prompt with the provided data")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Template prompt successfully created",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = TemplatePromptResponseDto.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input data",
+                content = @Content)
+    })
     @PostMapping
-    public ResponseEntity<TemplatePromptResponseDto> createTemplatePrompt(@RequestBody TemplatePromptRequestDto templatePromptDto) {
+    public ResponseEntity<TemplatePromptResponseDto> createTemplatePrompt(
+            @Parameter(description = "Template prompt data to create", required = true) 
+            @RequestBody TemplatePromptRequestDto templatePromptDto) {
         // Convert DTO to entity
         TemplatePrompt templatePrompt = templatePromptMapper.toEntity(templatePromptDto);
 

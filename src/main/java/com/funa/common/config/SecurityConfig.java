@@ -40,6 +40,10 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers("/api/template-prompts/**")
                     .permitAll()
+                    .requestMatchers("/swagger-ui/**")
+                    .permitAll() // Allow access to Swagger UI
+                    .requestMatchers("/v3/api-docs/**")
+                    .permitAll() // Allow access to OpenAPI docs
                     .anyRequest()
                     .authenticated() // Require authentication for all other endpoints
             )

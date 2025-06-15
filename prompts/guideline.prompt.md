@@ -9,8 +9,10 @@ This file contains guidelines for Junie to follow when working on this Spring Bo
   stable version).
 - **Build Tool:** Use Gradle as the build tool. Ensure the `build.gradle` usees the latest stable
   Spring Boot package.
-- **Unit test:** Use junit
-- **Log:** Use SLF4J as the logging API
+- **Unit test:** Use junit.
+- **Log:** Use SLF4J as the logging API.
+- **Swagger:** API Docs. Springdoc-openapi-starter-webmvc-ui 2.8.x (or the latest major stable
+  version).
 
 ## Project Structure
 
@@ -64,7 +66,8 @@ This file contains guidelines for Junie to follow when working on this Spring Bo
 
 ## Controller
 
-- **DO NOT use Entity**: use the `./dto/*Request.java`, `./dto/*Response.java`
+- **DO NOT use Entity:** Use the `./dto/*Request.java`, `./dto/*Response.java`.
+- **Swagger:** Generate Docs in All API.
 
 ## Data Access
 
