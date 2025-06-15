@@ -3,6 +3,13 @@ package com.funa.sqlquery;
 import com.funa.sqlquery.dto.SqlQueryMapper;
 import com.funa.sqlquery.dto.SqlQueryRequestDto;
 import com.funa.sqlquery.dto.SqlQueryResponseDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +23,7 @@ import java.util.NoSuchElementException;
  */
 @RestController
 @RequestMapping("/api/sql-queries")
+@Tag(name = "SQL Query", description = "SQL Query management API")
 public class SqlQueryController {
 
     private final SqlQueryService sqlQueryService;
@@ -32,6 +40,12 @@ public class SqlQueryController {
      *
      * @return List of all SQL queries
      */
+    @Operation(summary = "Get all SQL queries", description = "Retrieves a list of all SQL queries")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved SQL queries",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = SqlQueryResponseDto.class)))
+    })
     @GetMapping
     public ResponseEntity<List<SqlQueryResponseDto>> getAllSqlQueries() {
         List<SqlQuery> sqlQueries = sqlQueryService.getAllSqlQueries();
@@ -45,8 +59,17 @@ public class SqlQueryController {
      * @param id The ID of the SQL query
      * @return The SQL query
      */
+    @Operation(summary = "Get a SQL query by ID", description = "Retrieves a SQL query by its ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved the SQL query",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = SqlQueryResponseDto.class))),
+        @ApiResponse(responseCode = "404", description = "SQL query not found",
+                content = @Content)
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<SqlQueryResponseDto> getSqlQueryById(@PathVariable Long id) {
+    public ResponseEntity<SqlQueryResponseDto> getSqlQueryById(
+            @Parameter(description = "ID of the SQL query to retrieve") @PathVariable Long id) {
         try {
             SqlQuery sqlQuery = sqlQueryService.getSqlQueryById(id);
             SqlQueryResponseDto sqlQueryDto = sqlQueryMapper.toDto(sqlQuery);
@@ -75,8 +98,18 @@ public class SqlQueryController {
      * @param sqlQueryDto The SQL query data to create
      * @return The created SQL query
      */
+    @Operation(summary = "Create a new SQL query", description = "Creates a new SQL query with the provided data")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "SQL query successfully created",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = SqlQueryResponseDto.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input data",
+                content = @Content)
+    })
     @PostMapping
-    public ResponseEntity<SqlQueryResponseDto> createSqlQuery(@RequestBody SqlQueryRequestDto sqlQueryDto) {
+    public ResponseEntity<SqlQueryResponseDto> createSqlQuery(
+            @Parameter(description = "SQL query data to create", required = true) 
+            @RequestBody SqlQueryRequestDto sqlQueryDto) {
         // Convert DTO to entity
         SqlQuery sqlQuery = sqlQueryMapper.toEntity(sqlQueryDto);
 
