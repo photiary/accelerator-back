@@ -13,6 +13,7 @@ This file contains guidelines for Junie to follow when working on this Spring Bo
 - **Log:** Use SLF4J as the logging API.
 - **Swagger:** API Docs. Springdoc-openapi-starter-webmvc-ui 2.8.x (or the latest major stable
   version).
+- **PostgresSQL:** Use the 16.x stable version.
 
 ## Project Structure
 
@@ -81,6 +82,8 @@ This file contains guidelines for Junie to follow when working on this Spring Bo
 ## Database
 
 * **Table naming rules:** Use **Snake case** and prefix it with 'tb_'.
+* **Unit test & Local environment test:** Use H2 Database.
+* **Develop environment test:** Use PostgresSQL Database.
 
 ## Unit Test
 
