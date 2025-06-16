@@ -1,5 +1,6 @@
 package com.funa.feature;
 
+import com.funa.common.BaseTest;
 import com.funa.folder.Folder;
 import com.funa.folder.FolderService;
 import com.funa.sequencediagram.SequenceDiagram;
@@ -10,7 +11,6 @@ import com.funa.templateprompt.TemplatePrompt;
 import com.funa.templateprompt.TemplatePromptService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -18,9 +18,8 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 @Transactional
-public class FeatureServiceTest {
+public class FeatureServiceTest extends BaseTest {
 
     @Autowired
     private FeatureService featureService;
@@ -106,16 +105,16 @@ public class FeatureServiceTest {
         assertNotNull(createdFeature.getId());
         assertEquals("Test Feature", createdFeature.getName());
         assertEquals("Test Description", createdFeature.getDescription());
-        
+
         assertNotNull(createdFeature.getFolder());
         assertEquals(createdFolder.getId(), createdFeature.getFolder().getId());
-        
+
         assertNotNull(createdFeature.getTemplatePrompt());
         assertEquals(createdTemplatePrompt.getId(), createdFeature.getTemplatePrompt().getId());
-        
+
         assertNotNull(createdFeature.getSequenceDiagram());
         assertEquals(createdSequenceDiagram.getId(), createdFeature.getSequenceDiagram().getId());
-        
+
         assertNotNull(createdFeature.getSqlQuery());
         assertEquals(createdSqlQuery.getId(), createdFeature.getSqlQuery().getId());
     }

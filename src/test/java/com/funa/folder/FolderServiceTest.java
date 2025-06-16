@@ -1,8 +1,8 @@
 package com.funa.folder;
 
+import com.funa.common.BaseTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -10,9 +10,8 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 @Transactional
-public class FolderServiceTest {
+public class FolderServiceTest extends BaseTest {
 
     @Autowired
     private FolderService folderService;

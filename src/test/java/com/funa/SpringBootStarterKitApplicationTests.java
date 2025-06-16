@@ -1,10 +1,9 @@
 package com.funa;
 
+import com.funa.common.BaseTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class SpringBootStarterKitApplicationTests {
+class SpringBootStarterKitApplicationTests extends BaseTest {
 
   @Test
   void contextLoads() {}

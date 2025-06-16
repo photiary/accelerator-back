@@ -1,0 +1,38 @@
+volumes:
+  postgres_storage:
+
+networks:
+  accelerator_network:
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: accelerator-postgres
+    environment:
+      POSTGRES_DB: accelerator
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_storage:/var/lib/postgresql/data
+    networks: ['accelerator_network']
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: accelerator-be
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/accelerator
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: password
+    ports:
+      - "8080:8080"
+    networks:
+      - accelerator_network
+    restart: unless-stopped
