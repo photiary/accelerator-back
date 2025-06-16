@@ -35,6 +35,14 @@
   * SequenceDiagram
   * Query
 
+* API:
+  * createFeature:
+    * TemplatePrompt는 선택한 ID를 전달 받는다. 
+    * SequenceDiagram, TemplatePrompt, Query도 같이 생성하기위해 각 도메인의 ID는 전달 받지 않는다.
+  * updateFeature:
+    * SequenceDiagram, TemplatePrompt, Query 도메인을 같이 수정한다.
+  
+
 ### Sequence Diagram
 
 * 화면에서 작성한 Mermaid 코드를 관리
