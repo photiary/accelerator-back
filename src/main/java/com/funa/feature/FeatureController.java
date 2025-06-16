@@ -145,13 +145,30 @@ public class FeatureController {
             // Convert DTO to entity
             Feature feature = featureMapper.toEntity(featureDto);
 
-            // Create feature using service
-            Feature createdFeature = featureService.createFeature(
-                    feature, 
-                    featureDto.getFolderId(),
-                    featureDto.getTemplatePromptId(),
-                    featureDto.getSequenceDiagramId(),
-                    featureDto.getSqlQueryId());
+            Feature createdFeature;
+
+            // Check if we're creating new SequenceDiagram and SqlQuery or using existing ones
+            if ((featureDto.getSequenceDiagramName() != null && !featureDto.getSequenceDiagramName().isEmpty()) ||
+                (featureDto.getSqlQueryName() != null && !featureDto.getSqlQueryName().isEmpty())) {
+
+                // Create feature with new SequenceDiagram and SqlQuery
+                createdFeature = featureService.createFeature(
+                        feature, 
+                        featureDto.getFolderId(),
+                        featureDto.getTemplatePromptId(),
+                        featureDto.getSequenceDiagramName(),
+                        featureDto.getSequenceDiagramContent(),
+                        featureDto.getSqlQueryName(),
+                        featureDto.getSqlQueryContent());
+            } else {
+                // Create feature using existing entities
+                createdFeature = featureService.createFeature(
+                        feature, 
+                        featureDto.getFolderId(),
+                        featureDto.getTemplatePromptId(),
+                        featureDto.getSequenceDiagramId(),
+                        featureDto.getSqlQueryId());
+            }
 
             // Convert entity back to DTO
             FeatureResponseDto responseDto = featureMapper.toDto(createdFeature);
@@ -185,14 +202,32 @@ public class FeatureController {
             // Convert DTO to entity
             Feature feature = featureMapper.toEntity(featureDto);
 
-            // Update feature using service
-            Feature updatedFeature = featureService.updateFeature(
-                    id, 
-                    feature, 
-                    featureDto.getFolderId(),
-                    featureDto.getTemplatePromptId(),
-                    featureDto.getSequenceDiagramId(),
-                    featureDto.getSqlQueryId());
+            Feature updatedFeature;
+
+            // Check if we're updating or creating new SequenceDiagram and SqlQuery
+            if ((featureDto.getSequenceDiagramName() != null && !featureDto.getSequenceDiagramName().isEmpty()) ||
+                (featureDto.getSqlQueryName() != null && !featureDto.getSqlQueryName().isEmpty())) {
+
+                // Update feature with new or updated SequenceDiagram and SqlQuery
+                updatedFeature = featureService.updateFeature(
+                        id, 
+                        feature, 
+                        featureDto.getFolderId(),
+                        featureDto.getTemplatePromptId(),
+                        featureDto.getSequenceDiagramName(),
+                        featureDto.getSequenceDiagramContent(),
+                        featureDto.getSqlQueryName(),
+                        featureDto.getSqlQueryContent());
+            } else {
+                // Update feature using existing entities
+                updatedFeature = featureService.updateFeature(
+                        id, 
+                        feature, 
+                        featureDto.getFolderId(),
+                        featureDto.getTemplatePromptId(),
+                        featureDto.getSequenceDiagramId(),
+                        featureDto.getSqlQueryId());
+            }
 
             // Convert entity back to DTO
             FeatureResponseDto responseDto = featureMapper.toDto(updatedFeature);

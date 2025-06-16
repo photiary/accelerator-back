@@ -209,4 +209,175 @@ public class FeatureServiceTest extends BaseTest {
         List<Feature> featuresInAnotherFolder = featureService.findFeaturesByFolder(createdAnotherFolder.getId());
         assertEquals(1, featuresInAnotherFolder.size());
     }
+
+    @Test
+    public void testCreateFeatureWithNewRelatedEntities() {
+        // Create a folder
+        Folder folder = new Folder();
+        folder.setName("Test Folder");
+        Folder createdFolder = folderService.createFolder(folder, null);
+
+        // Create a template prompt
+        TemplatePrompt templatePrompt = new TemplatePrompt();
+        templatePrompt.setName("Test Template Prompt");
+        templatePrompt.setPromptContent("Test prompt content");
+        TemplatePrompt createdTemplatePrompt = templatePromptService.createTemplatePrompt(templatePrompt);
+
+        // Create a feature with new sequence diagram and SQL query
+        Feature feature = new Feature();
+        feature.setName("Test Feature");
+        feature.setDescription("Test Description");
+
+        String sequenceDiagramName = "New Sequence Diagram";
+        String sequenceDiagramContent = "sequenceDiagram\n    Alice->>John: Hello John, how are you?";
+        String sqlQueryName = "New SQL Query";
+        String sqlQueryContent = "SELECT * FROM test";
+
+        Feature createdFeature = featureService.createFeature(
+                feature,
+                createdFolder.getId(),
+                createdTemplatePrompt.getId(),
+                sequenceDiagramName,
+                sequenceDiagramContent,
+                sqlQueryName,
+                sqlQueryContent);
+
+        // Verify the feature was created with all relationships
+        assertNotNull(createdFeature.getId());
+        assertEquals("Test Feature", createdFeature.getName());
+        assertEquals("Test Description", createdFeature.getDescription());
+
+        assertNotNull(createdFeature.getFolder());
+        assertEquals(createdFolder.getId(), createdFeature.getFolder().getId());
+
+        assertNotNull(createdFeature.getTemplatePrompt());
+        assertEquals(createdTemplatePrompt.getId(), createdFeature.getTemplatePrompt().getId());
+
+        // Verify the sequence diagram was created
+        assertNotNull(createdFeature.getSequenceDiagram());
+        assertEquals(sequenceDiagramName, createdFeature.getSequenceDiagram().getName());
+        assertEquals(sequenceDiagramContent, createdFeature.getSequenceDiagram().getSequenceDiagramContent());
+
+        // Verify the SQL query was created
+        assertNotNull(createdFeature.getSqlQuery());
+        assertEquals(sqlQueryName, createdFeature.getSqlQuery().getName());
+        assertEquals(sqlQueryContent, createdFeature.getSqlQuery().getQueryContent());
+    }
+
+    @Test
+    public void testUpdateFeatureWithNewRelatedEntities() {
+        // Create a folder
+        Folder folder = new Folder();
+        folder.setName("Test Folder");
+        Folder createdFolder = folderService.createFolder(folder, null);
+
+        // Create a feature without related entities
+        Feature feature = new Feature();
+        feature.setName("Original Name");
+        feature.setDescription("Original Description");
+        Feature createdFeature = featureService.createFeature(feature, createdFolder.getId(), null, null, null);
+
+        // Update the feature with new sequence diagram and SQL query
+        Feature updatedData = new Feature();
+        updatedData.setName("Updated Name");
+        updatedData.setDescription("Updated Description");
+
+        String sequenceDiagramName = "New Sequence Diagram";
+        String sequenceDiagramContent = "sequenceDiagram\n    Alice->>John: Hello John, how are you?";
+        String sqlQueryName = "New SQL Query";
+        String sqlQueryContent = "SELECT * FROM test";
+
+        Feature updatedFeature = featureService.updateFeature(
+                createdFeature.getId(),
+                updatedData,
+                createdFolder.getId(),
+                null,
+                sequenceDiagramName,
+                sequenceDiagramContent,
+                sqlQueryName,
+                sqlQueryContent);
+
+        // Verify the feature was updated
+        assertEquals(createdFeature.getId(), updatedFeature.getId());
+        assertEquals("Updated Name", updatedFeature.getName());
+        assertEquals("Updated Description", updatedFeature.getDescription());
+
+        // Verify the sequence diagram was created
+        assertNotNull(updatedFeature.getSequenceDiagram());
+        assertEquals(sequenceDiagramName, updatedFeature.getSequenceDiagram().getName());
+        assertEquals(sequenceDiagramContent, updatedFeature.getSequenceDiagram().getSequenceDiagramContent());
+
+        // Verify the SQL query was created
+        assertNotNull(updatedFeature.getSqlQuery());
+        assertEquals(sqlQueryName, updatedFeature.getSqlQuery().getName());
+        assertEquals(sqlQueryContent, updatedFeature.getSqlQuery().getQueryContent());
+    }
+
+    @Test
+    public void testUpdateFeatureWithExistingRelatedEntities() {
+        // Create a folder
+        Folder folder = new Folder();
+        folder.setName("Test Folder");
+        Folder createdFolder = folderService.createFolder(folder, null);
+
+        // Create a sequence diagram
+        SequenceDiagram sequenceDiagram = new SequenceDiagram();
+        sequenceDiagram.setName("Original Sequence Diagram");
+        sequenceDiagram.setSequenceDiagramContent("Original content");
+        SequenceDiagram createdSequenceDiagram = sequenceDiagramService.createSequenceDiagram(sequenceDiagram);
+
+        // Create a SQL query
+        SqlQuery sqlQuery = new SqlQuery();
+        sqlQuery.setName("Original SQL Query");
+        sqlQuery.setQueryContent("Original SQL");
+        SqlQuery createdSqlQuery = sqlQueryService.createSqlQuery(sqlQuery);
+
+        // Create a feature with existing sequence diagram and SQL query
+        Feature feature = new Feature();
+        feature.setName("Original Name");
+        feature.setDescription("Original Description");
+        Feature createdFeature = featureService.createFeature(
+                feature, 
+                createdFolder.getId(), 
+                null, 
+                createdSequenceDiagram.getId(), 
+                createdSqlQuery.getId());
+
+        // Update the feature with updated sequence diagram and SQL query content
+        Feature updatedData = new Feature();
+        updatedData.setName("Updated Name");
+        updatedData.setDescription("Updated Description");
+
+        String updatedSequenceDiagramName = "Updated Sequence Diagram";
+        String updatedSequenceDiagramContent = "sequenceDiagram\n    Updated content";
+        String updatedSqlQueryName = "Updated SQL Query";
+        String updatedSqlQueryContent = "SELECT * FROM updated_table";
+
+        Feature updatedFeature = featureService.updateFeature(
+                createdFeature.getId(),
+                updatedData,
+                createdFolder.getId(),
+                null,
+                updatedSequenceDiagramName,
+                updatedSequenceDiagramContent,
+                updatedSqlQueryName,
+                updatedSqlQueryContent);
+
+        // Verify the feature was updated
+        assertEquals(createdFeature.getId(), updatedFeature.getId());
+        assertEquals("Updated Name", updatedFeature.getName());
+        assertEquals("Updated Description", updatedFeature.getDescription());
+
+        // Verify the sequence diagram was updated (same ID, new content)
+        assertNotNull(updatedFeature.getSequenceDiagram());
+        assertEquals(createdSequenceDiagram.getId(), updatedFeature.getSequenceDiagram().getId());
+        assertEquals(updatedSequenceDiagramName, updatedFeature.getSequenceDiagram().getName());
+        assertEquals(updatedSequenceDiagramContent, updatedFeature.getSequenceDiagram().getSequenceDiagramContent());
+
+        // Verify the SQL query was updated (same ID, new content)
+        assertNotNull(updatedFeature.getSqlQuery());
+        assertEquals(createdSqlQuery.getId(), updatedFeature.getSqlQuery().getId());
+        assertEquals(updatedSqlQueryName, updatedFeature.getSqlQuery().getName());
+        assertEquals(updatedSqlQueryContent, updatedFeature.getSqlQuery().getQueryContent());
+    }
 }
