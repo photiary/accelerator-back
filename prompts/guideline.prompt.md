@@ -91,3 +91,7 @@ This file contains guidelines for Junie to follow when working on this Spring Bo
 
 * Log output as JSON format.
 * **Log content:** timestamp, log level, transaction ID(Trace ID), user ID
+
+## ETC
+
+* Should be able to output to **Swagger.json** 
