@@ -44,6 +44,8 @@ public class SecurityConfig {
                     .permitAll() // Allow access to Swagger UI
                     .requestMatchers("/v3/api-docs/**")
                     .permitAll() // Allow access to OpenAPI docs
+                    .requestMatchers("/v3/api-docs")
+                    .permitAll() // Allow access to swagger.json
                     .anyRequest()
                     .authenticated() // Require authentication for all other endpoints
             )
