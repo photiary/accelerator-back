@@ -27,37 +27,40 @@ public class FeatureMapper {
         dto.setId(feature.getId());
         dto.setName(feature.getName());
         dto.setDescription(feature.getDescription());
-        
+
         // Set folder information
         if (feature.getFolder() != null) {
             dto.setFolderId(feature.getFolder().getId());
             dto.setFolderName(feature.getFolder().getName());
         }
-        
+
         // Set template prompt information
         if (feature.getTemplatePrompt() != null) {
             dto.setTemplatePromptId(feature.getTemplatePrompt().getId());
             dto.setTemplatePromptName(feature.getTemplatePrompt().getName());
+            dto.setTemplatePromptContent(feature.getTemplatePrompt().getPromptContent());
         }
-        
+
         // Set sequence diagram information
         if (feature.getSequenceDiagram() != null) {
             dto.setSequenceDiagramId(feature.getSequenceDiagram().getId());
             dto.setSequenceDiagramName(feature.getSequenceDiagram().getName());
+            dto.setSequenceDiagramContent(feature.getSequenceDiagram().getSequenceDiagramContent());
         }
-        
+
         // Set SQL query information
         if (feature.getSqlQuery() != null) {
             dto.setSqlQueryId(feature.getSqlQuery().getId());
             dto.setSqlQueryName(feature.getSqlQuery().getName());
+            dto.setSqlQueryContent(feature.getSqlQuery().getQueryContent());
         }
-        
+
         // Set audit fields
         dto.setCreatedAt(feature.getCreatedAt());
         dto.setCreatedId(feature.getCreatedId());
         dto.setUpdatedAt(feature.getUpdatedAt());
         dto.setUpdatedId(feature.getUpdatedId());
-        
+
         return dto;
     }
 
@@ -71,7 +74,7 @@ public class FeatureMapper {
         if (features == null) {
             return null;
         }
-        
+
         return features.stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
@@ -88,11 +91,11 @@ public class FeatureMapper {
         if (dto == null) {
             return null;
         }
-        
+
         Feature feature = new Feature();
         feature.setName(dto.getName());
         feature.setDescription(dto.getDescription());
-        
+
         return feature;
     }
 }

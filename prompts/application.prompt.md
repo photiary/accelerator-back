@@ -36,11 +36,15 @@
   * Query
 
 * API:
+  * responseFeature:
+    * Feature 도메인 
+    * TemplatePrompt, SequenceDiagram, Query 도메인의 ID와 Content를 응답한다.
   * createFeature:
     * TemplatePrompt는 선택한 ID를 전달 받는다. 
     * SequenceDiagram, TemplatePrompt, Query도 같이 생성하기위해 각 도메인의 ID는 전달 받지 않는다.
   * updateFeature:
-    * SequenceDiagram, TemplatePrompt, Query 도메인을 같이 수정한다.
+    * TemplatePrompt: 수정한 ID를 전달 받는다.
+    * SequenceDiagram, Query 도메인을 같이 수정한다. 수정 대상 도메인의 ID와 Content를 전달 받는다.
   
 
 ### Sequence Diagram
