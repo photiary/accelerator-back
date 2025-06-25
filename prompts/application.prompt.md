@@ -1,4 +1,4 @@
-# Junie Guidelines for an Application that Manages Prompts for Code Generation.
+# Junie Guidelines for an Application that Manages Prompts.
 
 # Features
 
